@@ -240,7 +240,7 @@ end
 ThirdPersonEquipmentExtension.set_equipment_visibility = function(self)
 	local hide = not self.show
 	self.special_state = self:is_special_state()
-	
+
 	if self.equipment then
 		for _, equip in pairs(self.equipment) do
 			if not self.special_state and (equip.slot == self.slot or hide) then
@@ -264,12 +264,14 @@ ThirdPersonEquipmentExtension.set_equipment_visibility = function(self)
                         end
                     end
 					equip.visible = true
+						
 				end
 			end
 		end
 	end
 
 	self:set_trinket_visibility(self.attached_trophies["trinket"])
+	
 end
 --[[
     Add equipment
@@ -590,7 +592,8 @@ ThirdPersonEquipmentExtension.link_unit = function(self, item_unit, item_setting
 	local world = Managers.world:world("level_world")
 	mod:echo('trying to link')
 
-	if attachment then
+	--[[
+		if attachment then
 		-- Attach unit to attachment unit
 	
 		local world = Unit.world(item_unit)	
@@ -625,16 +628,23 @@ ThirdPersonEquipmentExtension.link_unit = function(self, item_unit, item_setting
             return
         end
 		
-	elseif Unit.has_node(self.unit, item_setting.node) then
+	else 
+		--]]
+		if not item_setting.node then
+		 mod:echo("node not found, could not attach")
+		
+		elseif Unit.has_node(self.unit, item_setting.node) then
 		-- Attach unit to node
 		
 		local node = Unit.node(self.unit, item_setting.node)
-		mod:echo("node " .. item_setting.node .. " found, index: " .. node)
-		mod:echo('attaching to '.. item_setting.node )
+		--mod:echo("node " .. item_setting.node .. " found, index: " .. node)
+		mod:echo('attaching to '.. item_setting.node)
 		World.link_unit(world, item_unit, self.unit, node)
-	else
-		mod:echo("node: " .. item_setting.node ..' not found, could not attach')
 	end
+
+	--else
+	--	mod:echo("node: " .. item_setting.node ..' not found, could not attach')
+
 
 	--[[ Set position
 	local item_position = item_setting.position
